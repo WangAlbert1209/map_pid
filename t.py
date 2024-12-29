@@ -1,13 +1,24 @@
-# 初始化训练间隔和衰减因子
-initial_training_interval = 20
-decay_factor = 1.1  # 每隔一定的迭代数增大训练间隔
-min_training_interval = 5  # 最小训练间隔
-sum_i = 0
-# 在循环中逐步增加训练间隔
-for iteration in range(100):
-    training_interval = max(initial_training_interval * (decay_factor ** iteration), min_training_interval)
-    sum_i += training_interval
-    print(training_interval)
-    if training_interval > 200:
-        print(iteration, sum_i)
-        break
+import matplotlib.pyplot as plt
+import numpy as np
+
+# 假设的数据
+features = ['f1', 'f2', 'f3', 'f4', 'f5']
+shap_values = [np.random.normal(loc, 0.5, 100) for loc in range(-1, 4)]
+feature_values = [np.linspace(0, 1, 100) for _ in range(5)]
+
+# 创建一个散点图，其中每个点的纵坐标稍微偏移，以避免重叠
+fig, ax = plt.subplots(figsize=(10, 5))
+for i, (feature, shap, feat_val) in enumerate(zip(features, shap_values, feature_values)):
+    y = np.random.normal(i, 0.1, size=100)  # 在i附近产生小的随机偏移
+    sc = ax.scatter(shap, y, c=feat_val, cmap='viridis', edgecolor='none', s=10, vmin=0, vmax=1)
+
+ax.set_yticks(range(len(features)))
+ax.set_yticklabels(features)
+ax.set_xlabel('Shapley value')
+ax.set_title('Feature Impact and Value Distribution')
+
+# 添加颜色条
+cbar = plt.colorbar(sc, ax=ax, orientation='vertical')
+cbar.set_label('Feature value')
+
+plt.show()
