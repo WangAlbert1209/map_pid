@@ -11,13 +11,13 @@ from map_reader import visualize_neural_network
 plt.rcParams['font.family'] = 'Arial'
 
 
-def plot_activation_frequency(file_path, fitness_threshold=60, bar_width=0.25):
+def plot_activation_frequency(file_path, fitness_threshold=None, bar_width=0.25):
     """
     画出激活函数频率的柱状图
 
     参数:
     file_path: str, 归档文件路径
-    fitness_threshold: int, 用于筛选 fitness 大于此值的个体
+    fitness_threshold: int 或 None, 用于筛选 fitness 大于此值的个体，None 表示不筛选
     bar_width: float, 柱子的宽度
 
     返回:
@@ -28,7 +28,7 @@ def plot_activation_frequency(file_path, fitness_threshold=60, bar_width=0.25):
     with open(file_path, 'rb') as f:
         archive = pickle.load(f)
         for k, g in archive.items():
-            if g.fitness > fitness_threshold:
+            if fitness_threshold is None or g.fitness > fitness_threshold:
                 node_names = []
                 for n in g.nodes.values():
                     node_names.append(n.activation)  # 假设激活函数名存储在 `n.activation` 中
@@ -99,13 +99,13 @@ def plot_activation_frequency(file_path, fitness_threshold=60, bar_width=0.25):
     plt.show()
 
 
-def count_node_and_edge_frequencies(file_path, fitness_threshold=60):
+def count_node_and_edge_frequencies(file_path, fitness_threshold=None):
     """
     统计每个个体的节点数量和有效边数量，并计算不同数量的频率。
 
     参数:
     file_path: str, 归档文件路径
-    fitness_threshold: int, 用于筛选 fitness 大于此值的个体
+    fitness_threshold: int 或 None, 用于筛选 fitness 大于此值的个体，None 表示不筛选
 
     返回:
     node_count_frequencies: dict, 每个节点数量对应的频率
@@ -118,8 +118,9 @@ def count_node_and_edge_frequencies(file_path, fitness_threshold=60):
 
         archive = pickle.load(f)
         for k, g in archive.items():
-            if g.fitness >= fitness_threshold:
-                print(g.fitness)
+            print(g.fitness)
+            if fitness_threshold is None or g.fitness >= fitness_threshold:
+               
                 nums += 1
                 # if nums <= 10:
                 #     visualize_neural_network(g.nodes, g.connections)
@@ -200,5 +201,5 @@ def plot_node_and_edge_frequency_distribution(file_path, fitness_threshold=60):
 
 # 使用示例
 file_path = './map_archive_pole.pkl'  # 归档文件路径
-plot_activation_frequency(file_path)
-plot_node_and_edge_frequency_distribution(file_path, fitness_threshold=60)
+plot_activation_frequency(file_path, fitness_threshold=None)
+plot_node_and_edge_frequency_distribution(file_path, fitness_threshold=None)

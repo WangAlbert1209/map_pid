@@ -4,7 +4,7 @@ import neat
 import neat.genome
 from neat.genes import DefaultConnectionGene, DefaultNodeGene
 sys.path.append("C:\\Users\\77287\\Desktop\\map_pid")  # 将项目根目录添加到 Python 路径
-
+import numpy as np
 from src.my_neat.pid_act import CustomActivationFunctionSet
 class CustomGenomeConfig(neat.genome.DefaultGenomeConfig):
     def __init__(self, param_dict):
@@ -56,5 +56,45 @@ class CustomGenome(neat.DefaultGenome):
     def reset_pid(self):
         """重置所有具有reset方法的激活函数的状态"""
         for node in self.nodes.values():
-            if hasattr(node.activation_function, 'reset'):
-                node.activation_function.reset()
+            if hasattr(node, 'activation_function'):
+                if hasattr(node.activation_function, 'reset'):
+                    node.activation_function.reset()
+                    
+    def get_parameters(self):
+        """
+        获取基因组的可优化参数
+        Returns:
+            numpy.ndarray: 包含所有权重和偏置的一维数组
+        """
+        params = []
+        # 收集连接权重
+        for conn in self.connections.values():
+            if conn.enabled:
+                params.append(conn.weight)
+        
+        # 收集节点偏置
+        for node in self.nodes.values():
+            if hasattr(node, 'bias'):
+                params.append(node.bias)
+        
+        return np.array(params)
+
+    def set_parameters(self, params):
+        """
+        设置基因组的参数
+        Args:
+            params (numpy.ndarray): 包含所有权重和偏置的一维数组
+        """
+        param_idx = 0
+        
+        # 设置连接权重
+        for conn in self.connections.values():
+            if conn.enabled:
+                conn.weight = params[param_idx]
+                param_idx += 1
+        
+        # 设置节点偏置
+        for node in self.nodes.values():
+            if hasattr(node, 'bias'):
+                node.bias = params[param_idx]
+                param_idx += 1

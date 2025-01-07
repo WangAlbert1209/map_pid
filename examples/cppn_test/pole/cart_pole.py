@@ -16,7 +16,7 @@ class CartPole(object):
     time_step = 0.01  # time step in seconds
 
     def __init__(self, x=None, theta=None, dx=None, dtheta=None,
-                 position_limit=10, angle_limit_radians=100 * pi / 180):
+                 position_limit=10, angle_limit_radians=180 * pi / 180):
         self.position_limit = position_limit
         self.angle_limit_radians = angle_limit_radians
 
@@ -24,13 +24,19 @@ class CartPole(object):
             x = uniform(-0.5 * self.position_limit, 0.5 * self.position_limit)
 
         if theta is None:
-            theta = uniform(-0.5 * self.angle_limit_radians, 0.5 * self.angle_limit_radians)
+            theta = uniform(0, np.pi*2)
+            theta=theta%(2*np.pi)
+            if theta > np.pi:
+                theta= theta-np.pi*2
+            # theta = uniform(-0.5 * self.angle_limit_radians, 0.5 * self.angle_limit_radians)
 
         if dx is None:
-            dx = uniform(-1.0, 1.0)
+            # dx = uniform(-1.0, 1.0)
+            dx = 0
 
         if dtheta is None:
-            dtheta = uniform(-1.0, 1.0)
+            # dtheta = uniform(-1.0, 1.0)
+            dtheta= 0
 
         self.t = 0.0
         self.x = x
@@ -63,7 +69,9 @@ class CartPole(object):
         # Update position/angle.
         self.x += dt * self.dx + 0.5 * xacc0 * dt ** 2
         self.theta += dt * self.dtheta + 0.5 * tacc0 * dt ** 2
-
+        self.theta = (self.theta % (2 * np.pi)) 
+        if self.theta > np.pi:
+                self.theta = self.theta - (2 * np.pi)
         # Compute new accelerations as given in "Correct equations for the dynamics of the cart-pole system"
         # by Razvan V. Florian (http://florian.io).
         # http://coneural.org/florian/papers/05_cart_pole.pdf
@@ -95,7 +103,7 @@ def continuous_actuator_force(action):
     raw_input = action[0]
     # 使用 numpy 的 sigmoid 函数替代手动实现
     sigmoid_value = np.exp(-np.logaddexp(0, -raw_input))  # 等同于 1/(1 + np.exp(-raw_input))
-    force = (2.0 * sigmoid_value - 1.0)*100
+    force = (2.0 * sigmoid_value - 1.0)*200
     return force
 
 def noisy_continuous_actuator_force(action):

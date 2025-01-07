@@ -2,31 +2,40 @@ from neat.activations import ActivationFunctionSet
 import types
 class i_activation:
 
-    def __init__(self, dt=0.01):
+    def __init__(self, dt=0.01, limit=None):
         self.dt = dt
         self.integral = 0.0
+        self.limit = limit  # 添加积分限幅
+        
     def reset(self):
         self.integral = 0.0
     def __call__(self, x):
-        self.integral += x*self.dt
+        self.integral += x * self.dt
+        if self.limit:
+            self.integral = max(min(self.integral, self.limit), -self.limit)
         return self.integral 
     def __str__(self):
-        return self.integral
+        return f"Integral: {self.integral}"  # 修正字符串返回
     
     
 class d_activation:
 
     def __init__(self, dt=0.01):
         self.dt = dt
-        self.prev_x = 0.0
+        self.prev_x = None  # 初始化为None以标记第一次调用
+        
     def reset(self):
-        self.prev_x = 0.0
+        self.prev_x = None
     def __str__(self):
-        return self.prev_x
+        return f"Previous value: {self.prev_x}"  # 修正字符串返回
     def __call__(self, x):
+        if self.prev_x is None:  # 处理第一次调用
+            self.prev_x = x
+            return 0.0
+        
         dx = x - self.prev_x
         self.prev_x = x
-        return  dx / self.dt
+        return dx / self.dt
     
     
 class InvalidActivationFunction(TypeError):

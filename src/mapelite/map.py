@@ -234,12 +234,10 @@ class Archive:
                     polygon = [vor.vertices[i] for i in region]
                     ax.fill(*zip(*polygon), color=cmap(norm(genome.fitness)))
 
-            ax.set_title("Voronoi Diagram of Archive")
+            # 修复 colorbar 的问题
             sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-            sm.set_array([])
-            plt.colorbar(sm, label="Fitness")
-            # Plot adjustments
-            ax.set_title("Voronoi")
+            plt.colorbar(sm, ax=ax, label="Fitness")  # 添加 ax 参数
+            ax.set_title("Voronoi Diagram of Archive")
         else:
             # Scatter plot for grid-based visualization
             plt.figure(figsize=(8, 8))
@@ -256,7 +254,7 @@ class Archive:
         plt.ylim(0, 1)
         plt.gca().set_aspect('equal', adjustable='box')
         plt.grid(False)
-        plt.show(block=False)
+        # plt.show(block=False)
         plt.savefig('./pole_map.png')
         plt.close()
         return min_fit, max_fit, best_genome, worst_genome

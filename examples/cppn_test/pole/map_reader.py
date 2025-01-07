@@ -1,3 +1,4 @@
+import math
 import os
 import pickle
 
@@ -134,7 +135,7 @@ with open("./map_archive_pole.pkl", "rb") as f:
     # print(len(archive))
     for b, g in archive.items():
 
-        if g.fitness >-0.14:
+        if g.fitness >0.14:
             ll += 1
             visualize_neural_network(g.nodes,g.connections)
             if ll >= 10:

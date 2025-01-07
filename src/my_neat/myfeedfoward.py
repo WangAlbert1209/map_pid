@@ -45,8 +45,11 @@ class MyFeedForwardNetwork(object):
                 ng = genome.nodes[node]
                 aggregation_function = config.genome_config.aggregation_function_defs.get(ng.aggregation)
                 # 修改这里：使用已实例化的activation_function而不是从配置中获取
-                activation_function = getattr(ng, 'activation_function', 
+                if hasattr(ng, 'activation_function'):
+                    activation_function = getattr(ng, 'activation_function', 
                                            config.genome_config.activation_defs.get(ng.activation))
+                else:
+                    activation_function = config.genome_config.activation_defs.get(ng.activation)
                 node_evals.append((node, activation_function, aggregation_function, ng.bias, ng.response, inputs))
 
         return MyFeedForwardNetwork(config.genome_config.input_keys, config.genome_config.output_keys, node_evals)
