@@ -1,5 +1,6 @@
 import gizeh as gz
-import moviepy.editor as mpy
+# import moviepy.editor as mpy
+import moviepy as mpy
 import math
 from cart_pole import CartPole
 

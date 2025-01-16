@@ -14,6 +14,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))  # 获取当前文件�
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(current_dir)))  # 获取项目根目录
 
 sys.path.append(project_root)  # 将项目根目录添加到 Python 路径
+sys.path.append("/home/rl_user/Workspace/hank/map_pid") 
 
 
 import pickle

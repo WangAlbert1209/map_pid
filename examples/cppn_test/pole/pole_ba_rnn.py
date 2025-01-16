@@ -14,6 +14,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))  # 获取当前文件�
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(current_dir)))  # 获取项目根目录
 
 sys.path.append(project_root)  # 将项目根目录添加到 Python 路径
+sys.path.append("/home/rl_user/Workspace/hank/map_pid") 
 
 
 import pickle
@@ -98,7 +99,7 @@ def run():
     pe.evaluate(list(init_pops.values()), config)
     for id, g in init_pops.items():
         neat2.map_archive.add_to_archive(g)
-    map_archive = neat2.run(pe.evaluate, num_generations=config.gen)
+    map_archive = neat2.run(pe.evaluate, eval_genome, num_generations=config.gen)
     minf, maxf, best, worst = map_archive.display_archive()
     # Save the winner.
     with open('winner-feedforward', 'wb') as f:

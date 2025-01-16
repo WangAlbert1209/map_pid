@@ -17,7 +17,8 @@ import sys
 # 添加项目根目录到 Python 路径
 current_dir = os.path.dirname(os.path.abspath(__file__))  # 获取当前文件目录
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(current_dir)))  # 获取项目根目录
-sys.path.append("/home/ymh/map_pid") 
+# sys.path.append("/home/ymh/map_pid") 
+sys.path.append("/home/rl_user/Workspace/hank/map_pid") 
 from src.my_neat.myfeedfoward import MyFeedForwardNetwork
 from src.my_neat.mygenome import CustomGenome
 from src.my_neat.myconfig import MyConfig
@@ -138,14 +139,14 @@ for i in range(num_runs_init_final):
     final_theta_list.append(final_t)
 
 
-# 绘制初始theta与最终theta的对应关系散点图
-plt.figure(figsize=(6, 4))
-plt.scatter(initial_theta_list, final_theta_list, color='r', marker='o',s=1 ,label='initial theta & final theta')
-plt.title("Multiple runnings initial theta & final theta")
-plt.xlabel("initial theta")
-plt.ylabel("final theta")
-# plt.ylim(-0.01,0.01)
-plt.legend()
-plt.grid(True)
-plt.savefig("initial_theta_vs_final_theta.png")
-plt.show() 
+# # 绘制初始theta与最终theta的对应关系散点图
+# plt.figure(figsize=(6, 4))
+# plt.scatter(initial_theta_list, final_theta_list, color='r', marker='o',s=1 ,label='initial theta & final theta')
+# plt.title("Multiple runnings initial theta & final theta")
+# plt.xlabel("initial theta")
+# plt.ylabel("final theta")
+# # plt.ylim(-0.01,0.01)
+# plt.legend()
+# plt.grid(True)
+# plt.savefig("initial_theta_vs_final_theta.png")
+# plt.show() 
